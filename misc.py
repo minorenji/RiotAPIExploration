@@ -2,6 +2,8 @@ import json
 import os
 
 
+
+
 # Text formatting headers
 class Colors:
     HEADER = '\033[95m'
@@ -20,6 +22,9 @@ class Colors:
 
 class References:
     regions = ["RU", "KR", "BR1", "OC1", "JP1", "NA1", "EUN1", "EUW1", "TR1", "LA1", "LA2"]
+    patch = {
+        "10.1": 1578441600000
+    }
 
 
 # Contains functions to open and write to files
