@@ -14,9 +14,11 @@ def verify_api_key(api_key):
                 Colors.print_reset(Colors.OKBLUE + "Please enter a valid Riot API key:")
                 api_key = input()
                 continue
+            else:
+                raise err
         break
     Colors.print_reset(Colors.OKGREEN + "API key verified.")
-    FileAccess.write("api_key.txt", api_key)
+    FileAccess.write(api_key, "api_key.txt")
     Colors.print_reset(Colors.OKBLUE + "RiotWatcher object created.")
     return watcher
 

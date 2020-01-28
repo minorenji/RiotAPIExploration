@@ -1,7 +1,6 @@
 import json
 import os
-
-
+import requests
 
 
 # Text formatting headers
@@ -20,43 +19,44 @@ class Colors:
         print(text + Colors.ENDC)
 
 
-class References:
-    regions = ["RU", "KR", "BR1", "OC1", "JP1", "NA1", "EUN1", "EUW1", "TR1", "LA1", "LA2"]
-    patch = {
-        "10.1": 1578441600000
-    }
-
-
 # Contains functions to open and write to files
-class FileAccess:
+class FileAccess():
     @staticmethod
     def read(filepath):
         if not os.path.exists(filepath):
             print(Colors.FAIL + "Filepath \"{}\" does not exist.".format(filepath))
             return None
-        if ".json" in filepath:
-            with open(filepath, 'r') as json_file:
-                return json.load(json_file)
-        elif ".txt" in filepath:
-            with open(filepath, 'r') as txt_file:
-                return txt_file.readline()
-        else:
-            raise ValueError("Unknown file type or missing file extension.")
+        with open(filepath, 'r') as file:
+            if ".json" in filepath:
+                return json.load(file)
+            elif ".txt" in filepath:
+                return file.readline()
+            else:
+                raise ValueError("Unknown file type or missing file extension.")
 
     @staticmethod
-    def write(filepath, contents):
-        if ".json" in filepath:
-            with open(filepath, 'w') as outfile:
-                json.dump(contents, outfile)
-        elif ".txt" in filepath:
-            with open(filepath, 'w') as outfile:
-                outfile.write(contents)
-        else:
-            raise ValueError("Unknown file type or missing file extension.")
+    def write(content, filepath):
+        if "/" in filepath:
+            FileAccess.makedir(filepath)
+        with open(filepath, 'w') as outfile:
+            if ".json" in filepath:
+                json.dump(content, outfile)
+            elif ".txt" in filepath:
+                outfile.write(content)
+            else:
+                raise ValueError("Unknown file type or missing file extension.")
 
     @staticmethod
-    def makedir(filepath):
-        if os.path.exists(filepath):
-            return True
-        else:
-            os.mkdir(filepath)
+    def makedir(path):
+        full_path = path.split("/")
+        for i in range(1, len(full_path) + 1):
+            if not os.path.exists("/".join(full_path[:i])):
+                os.mkdir("/".join(full_path[:i]))
+
+
+class References:
+    regions = ["RU", "KR", "BR1", "OC1", "JP1", "NA1", "EUN1", "EUW1", "TR1", "LA1", "LA2"]
+    patch_r = requests.get("https://raw.githubusercontent.com/CommunityDragon/Data/master/patches.json")
+    FileAccess.makedir("References")
+    with open('References/patches.json', 'wb') as f:
+        f.write(patch_r.content)
