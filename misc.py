@@ -1,10 +1,8 @@
 import json
 import os
+from riotwatcher import ApiError
 
 
-
-
-# Text formatting headers
 class Colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

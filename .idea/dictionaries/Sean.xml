@@ -2,6 +2,7 @@
   <dictionary name="Sean">
     <words>
       <w>filepath</w>
+      <w>matchlist</w>
     </words>
   </dictionary>
 </component>
